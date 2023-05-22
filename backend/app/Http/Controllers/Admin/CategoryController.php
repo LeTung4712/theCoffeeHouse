@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
+    //create category
     public function create(Request $request)
     {
         if (Category::where('name', $request->name)->first()) {
@@ -26,7 +27,7 @@ class CategoryController extends Controller
             'category' => $category,
         ]);
     }
-
+    //get all category
     public function index()
     {
         $categories = Category::orderby('id')->get();
@@ -34,7 +35,7 @@ class CategoryController extends Controller
             'Categories' => $categories,
         ], 200);
     }
-
+    //get category by parent_id
     public function indexByParentId(Request $request)
     {
         $categories = Category::where('parent_id', $request->parent_id)
@@ -43,7 +44,8 @@ class CategoryController extends Controller
             'Categories' => $categories,
         ], 200);
     }
-    public function update(Request $request)
+    //update category by id
+    public function update(Request $request) 
     {
         $category = Category::find($request->id);
         if ($request->input('parent_id') != null && $request->input('parent_id') != $category->id) {
@@ -57,7 +59,7 @@ class CategoryController extends Controller
             'Category' => $category,
         ], 200);
     }
-
+    //delete category
     public function destroy(Request $request): JsonResponse
     {
         $id = (int) $request->input('id');
