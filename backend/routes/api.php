@@ -29,5 +29,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('product/getProductInfo', [ProductController::class, 'getProductInfo']); // http://localhost:8000/api/admin/product/getProductInfo?id=1
     Route::post('product/destroy', [ProductController::class, 'destroy']); // http://localhost:8000/api/admin/product/destroy?id=1
     Route::post('product/indexByCategoryId', [ProductController::class, 'indexByCategoryId']); // http://localhost:8000/api/admin/product/indexByCategoryId?category_id=1
-    
+    //topping api
+    Route::get('topping/index', [ProductController::class, 'indexTopping']); // http://localhost:8000/api/admin/topping/index
+    Route::post('topping/create', [ProductController::class, 'createTopping']); // http://localhost:8000/api/admin/topping/create?name=abc&price=10000
+    Route::post('topping/update', [ProductController::class, 'updateTopping']); // http://localhost:8000/api/admin/topping/update?id=1&name=abc&price=10000
+    Route::post('topping/delete', [ProductController::class, 'deleteTopping']); // http://localhost:8000/api/admin/topping/delete?id=1
 });

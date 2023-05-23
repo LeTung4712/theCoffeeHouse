@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Topping;
+use App\Models\ToppingProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -40,10 +42,23 @@ class ProductController extends Controller
             'active' => 1,
             'image_url' => $request->image_url,
         ]);
+        //tạo topping cho sản phẩm nếu là đồ ăn thì mặc định là topping 0
+        if ($request->category_id == 13||$request->category_id == 14||$request->category_id == 16) {
+            $topping = ToppingProduct::create([
+                'product_id' => $product->id,
+                'topping_id' => [0]
+            ]);
+        } else {
+            $topping = ToppingProduct::create([
+                'product_id' => $product->id,
+                'topping_id' => [1,2,3,4,5]
+            ]);
+        }
 
         return response([
             'message' => "Thêm sản phẩm thành công",
             'product' => $product,
+            'topping' => $topping
         ], 200);
     }
     //lay danh sach danh muc con theo danh muc cha
@@ -74,6 +89,7 @@ class ProductController extends Controller
                     $categoryList->push($child); //push vào cuối mảng categoryList
             }
         }
+        
         foreach ($categoryList as $category) {
             $product_list = Product::where('category_id', $category->id)
                 ->where('active', 1)
@@ -114,6 +130,7 @@ class ProductController extends Controller
             ->where('active', 1)
             ->where('id', '<>', $productInfo->id) // <> là phép so sánh khác
             ->get();
+        
         return response([
             'message' => 'Lấy thông tin sản phẩm thành công',
             'product' => $productInfo,
