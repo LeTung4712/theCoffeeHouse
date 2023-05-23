@@ -28,4 +28,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('product/update', [ProductController::class, 'update']); // http://localhost:8000/api/admin/product/update?id=1&name=abc&category_id=1&price=10000&description=abc&image_url=abc&active=1&price_sale=10000
     Route::post('product/getProductInfo', [ProductController::class, 'getProductInfo']); // http://localhost:8000/api/admin/product/getProductInfo?id=1
     Route::post('product/destroy', [ProductController::class, 'destroy']); // http://localhost:8000/api/admin/product/destroy?id=1
+    Route::post('product/indexByCategoryId', [ProductController::class, 'indexByCategoryId']); // http://localhost:8000/api/admin/product/indexByCategoryId?category_id=1
+    
 });

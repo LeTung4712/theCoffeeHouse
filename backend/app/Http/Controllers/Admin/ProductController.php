@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+
 
 // thư viện để sử dụng session
 
@@ -44,7 +46,48 @@ class ProductController extends Controller
             'product' => $product,
         ], 200);
     }
-    //lay thong tin san pham
+    //lay danh sach danh muc con theo danh muc cha
+    public function getChild($parent)
+    {
+        $childList = Category::select('id')  //chọn cột id
+            ->where('parent_id', $parent->id) //có điều kiện là cột parent_id = id của parent
+            ->orderby('id')
+            ->get();
+        return $childList;
+    }
+    //lay danh sach san pham theo danh muc
+    //ý tưởng : lấy danh sách danh mục con của danh mục request đến, 
+    //sau đó lấy danh sách sản phẩm của tất cả danh mục con đó
+    public function indexByCategoryId(Request $request)
+    {
+        $categoryList = collect(); 
+        $childList = collect();
+        $productList = collect();
+
+        $categoryList = Category::select('id')
+            ->where('id', $request->category_id)
+            ->get();
+        for ($i = 0; $i < $categoryList->count(); $i++) {
+            $childList = $this->getChild($categoryList[$i]);
+            foreach ($childList as $child) {
+                if (!($categoryList->contains($child)))//contains() kiểm tra xem mảng có chứa phần tử đó chưa,phương thức này thuọc class
+                    $categoryList->push($child); //push vào cuối mảng categoryList
+            }
+        }
+        foreach ($categoryList as $category) {
+            $product_list = Product::where('category_id', $category->id)
+                ->where('active', 1)
+                ->orderby('id')
+                ->get();
+            foreach ($product_list as $product) {
+                $productList->push($product);
+            }
+        }
+        return response([
+            'products' => $productList,
+        ]);
+    }
+    //lay thong tin chi tiet san pham
     public function getProductInfo(Request $request)
     {
         $productInfo = Product::select(
@@ -65,7 +108,7 @@ class ProductController extends Controller
 
         ], 200);
     }
-
+    //cap nhat san pham
     public function update(Request $request)
     {
         $product = Product::where('id', $request->input('id'))->first();
