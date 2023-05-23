@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ToppingController;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'admin'], function () {
 
     //auth api
-
+    Route::post('auth/login', [LoginController::class, 'login']); // http://localhost:8000/api/admin/auth/login?username=admin@gmail.com&password=123456
     //category api
     Route::post('category/create', [CategoryController::class, 'create']); // vd http://localhost:8000/api/admin/category/create?name=abc&parent_id=2&image_url=abc
     Route::get('category/index', [CategoryController::class, 'index']); // http://localhost:8000/api/admin/category/index
@@ -33,8 +34,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('product/destroy', [ProductController::class, 'destroy']); // http://localhost:8000/api/admin/product/destroy?id=1
     Route::post('product/indexByCategoryId', [ProductController::class, 'indexByCategoryId']); // http://localhost:8000/api/admin/product/indexByCategoryId?category_id=1
     //topping api
-    Route::get('topping/index', [ProductController::class, 'indexTopping']); // http://localhost:8000/api/admin/topping/index
-    Route::post('topping/create', [ProductController::class, 'createTopping']); // http://localhost:8000/api/admin/topping/create?name=abc&price=10000
-    Route::post('topping/update', [ProductController::class, 'updateTopping']); // http://localhost:8000/api/admin/topping/update?id=1&name=abc&price=10000
-    Route::post('topping/delete', [ProductController::class, 'deleteTopping']); // http://localhost:8000/api/admin/topping/delete?id=1
+    Route::get('topping/index', [ToppingController::class, 'index']); // http://localhost:8000/api/admin/topping/index
+    Route::post('topping/create', [ToppingController::class, 'create']); // http://localhost:8000/api/admin/topping/create?name=abc&price=10000
+    Route::post('topping/update', [ToppingController::class, 'update']); // http://localhost:8000/api/admin/topping/update?id=1&name=abc&price=10000
+    Route::post('topping/delete', [ToppingController::class, 'delete']); // http://localhost:8000/api/admin/topping/delete?id=1
 });
