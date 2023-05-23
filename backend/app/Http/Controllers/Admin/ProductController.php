@@ -98,13 +98,26 @@ class ProductController extends Controller
             'price_sale',
             'image_url'
         )
-            ->where('id', $request->id) // where() là hàm lọc dữ liệu theo điều kiện
+            ->where('id', $request->id) 
             ->where('active', 1)
             ->first(); // first() là hàm lấy ra bản ghi đầu tiên thỏa mãn điều kiện
 
+        $sameProductList = Product::select(
+            'id',
+            'name',
+            'category_id',
+            'description',
+            'price_sale',
+            'image_url'
+        )
+            ->where('category_id', $productInfo->category_id)
+            ->where('active', 1)
+            ->where('id', '<>', $productInfo->id) // <> là phép so sánh khác
+            ->get();
         return response([
             'message' => 'Lấy thông tin sản phẩm thành công',
             'product' => $productInfo,
+            'same_products' => $sameProductList,
 
         ], 200);
     }
