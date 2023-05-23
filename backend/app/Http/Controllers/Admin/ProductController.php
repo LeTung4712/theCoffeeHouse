@@ -103,6 +103,22 @@ class ProductController extends Controller
             'products' => $productList,
         ]);
     }
+    //lấy danh sách topping của sản phẩm và info của topping
+    public function getToppingInfo($product_id)
+    {
+        $toppingList = ToppingProduct::select('topping_id')
+            ->where('product_id', $product_id)
+            ->first();
+        $toppingInfoList = collect();
+        foreach ($toppingList->topping_id as $topping_id) {
+            $toppingInfo = Topping::select('id', 'name', 'price')
+                ->where('id', $topping_id)
+                ->first();
+            $toppingInfoList->push($toppingInfo); 
+        }
+        //vd toppingInfoList có dạng json như sau [{"id":1,"name":"Trân châu đen","price":10000},{"id":2,"name":"Trân châu trắng","price":10000}]
+        return $toppingInfoList;
+    }
     //lay thong tin chi tiet san pham
     public function getProductInfo(Request $request)
     {
@@ -130,11 +146,14 @@ class ProductController extends Controller
             ->where('active', 1)
             ->where('id', '<>', $productInfo->id) // <> là phép so sánh khác
             ->get();
+        //gọi hàm getToppingInfo để lấy danh sách topping của sản phẩm
+        $toppings= $this->getToppingInfo($request->id);
         
         return response([
             'message' => 'Lấy thông tin sản phẩm thành công',
             'product' => $productInfo,
-            'same_products' => $sameProductList,
+            'toppings' => $toppings,
+            'same_products' => $sameProductList
 
         ], 200);
     }
