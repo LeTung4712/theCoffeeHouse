@@ -20,12 +20,13 @@ class CategoryController extends Controller
         $category = Category::create([
             'name' => (string) $request->input('name'),
             'parent_id' => (int) $request->input('parent_id'),
+            'image_url' => (string) $request->input('image_url')
         ]);
 
         return response([
             'message' => 'Thêm danh mục thành công',
             'category' => $category,
-        ]);
+        ], 200);
     }
     //get all category
     public function index()
