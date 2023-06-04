@@ -10,9 +10,6 @@ use App\Models\ToppingProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-
-// thư viện để sử dụng session
-
 class ProductController extends Controller
 {
     //lay danh sach san pham
@@ -33,7 +30,7 @@ class ProductController extends Controller
                 'message' => 'Đã có sản phẩm này',
             ]);
         }
-        $product = Product::create([ // create() là hàm tạo mới 1 bản ghi trong database thuộc lop
+        $product = Product::create([ 
             'name' => $request->name,
             'category_id' => $request->category_id,
             'description' => $request->description,
@@ -42,11 +39,11 @@ class ProductController extends Controller
             'active' => 1,
             'image_url' => $request->image_url,
         ]);
-        //tạo topping cho sản phẩm nếu là đồ ăn thì mặc định là topping 0
+        //tạo topping cho sản phẩm nếu là đồ ăn thì mặc định là topping 6
         if ($request->category_id == 13||$request->category_id == 14||$request->category_id == 16) {
             $topping = ToppingProduct::create([
                 'product_id' => $product->id,
-                'topping_id' => [0]
+                'topping_id' => [6]
             ]);
         } else {
             $topping = ToppingProduct::create([
@@ -85,7 +82,7 @@ class ProductController extends Controller
         for ($i = 0; $i < $categoryList->count(); $i++) {
             $childList = $this->getChild($categoryList[$i]);
             foreach ($childList as $child) {
-                if (!($categoryList->contains($child)))//contains() kiểm tra xem mảng có chứa phần tử đó chưa,phương thức này thuọc class
+                if (!($categoryList->contains($child)))
                     $categoryList->push($child); //push vào cuối mảng categoryList
             }
         }
@@ -144,7 +141,7 @@ class ProductController extends Controller
         )
             ->where('category_id', $productInfo->category_id)
             ->where('active', 1)
-            ->where('id', '<>', $productInfo->id) // <> là phép so sánh khác
+            ->where('id', '<>', $productInfo->id) // <> là phép so sánh khác 
             ->get();
         //gọi hàm getToppingInfo để lấy danh sách topping của sản phẩm
         $toppings= $this->getToppingInfo($request->id);
