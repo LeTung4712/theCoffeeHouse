@@ -124,10 +124,11 @@ class ProductController extends Controller
             'name',
             'category_id',
             'description',
+            'price',
             'price_sale',
             'image_url'
         )
-            ->where('id', $request->id) 
+            ->where('id', $request->product_id) 
             ->where('active', 1)
             ->first(); // first() là hàm lấy ra bản ghi đầu tiên thỏa mãn điều kiện
 
@@ -136,6 +137,7 @@ class ProductController extends Controller
             'name',
             'category_id',
             'description',
+            'price',
             'price_sale',
             'image_url'
         )
@@ -144,7 +146,7 @@ class ProductController extends Controller
             ->where('id', '<>', $productInfo->id) // <> là phép so sánh khác 
             ->get();
         //gọi hàm getToppingInfo để lấy danh sách topping của sản phẩm
-        $toppings= $this->getToppingInfo($request->id);
+        $toppings= $this->getToppingInfo($request->product_id);
         
         return response([
             'message' => 'Lấy thông tin sản phẩm thành công',
