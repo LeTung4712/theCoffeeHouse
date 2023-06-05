@@ -51,7 +51,7 @@ class AuthController extends Controller
 
         $result = $client->messages->create($receiverNumber, [
             'from' => $twilio_number,
-            'body' => $message
+            'body' => $message,
         ]);
         return $result; 
     }
@@ -81,5 +81,9 @@ class AuthController extends Controller
             'expire_at' => Carbon::now()->addMinutes(3) // thời gian hết hạn = thời gian hiện tại + 3 phút
         ]);
     }
-    
+    //kiểm tra mã otp
+    public function checkOtp(Request $request)
+    {
+        
+    }
 }
