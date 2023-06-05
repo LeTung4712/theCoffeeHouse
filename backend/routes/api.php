@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ToppingController;
+use App\Http\Controllers\User\Auth\AuthController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,4 +40,12 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('topping/create', [ToppingController::class, 'create']); // http://localhost:8000/api/admin/topping/create?name=abc&price=10000
     Route::post('topping/update', [ToppingController::class, 'update']); // http://localhost:8000/api/admin/topping/update?id=1&name=abc&price=10000
     Route::post('topping/delete', [ToppingController::class, 'delete']); // http://localhost:8000/api/admin/topping/delete?id=1
+});
+
+//api cho user
+Route::group(['prefix' => 'user'], function () {
+    //auth api
+    Route::get('auth/index', [AuthController::class, 'index']); // http://localhost:8000/api/user/auth/index
+    //Route::post('auth/login', [AuthController::class, 'login']); // http://localhost:8000/api/user/auth/login?mobile_no=0828035636
+
 });
