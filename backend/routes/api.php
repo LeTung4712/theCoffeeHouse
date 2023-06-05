@@ -46,6 +46,6 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'user'], function () {
     //auth api
     Route::get('auth/index', [AuthController::class, 'index']); // http://localhost:8000/api/user/auth/index
-    //Route::post('auth/login', [AuthController::class, 'login']); // http://localhost:8000/api/user/auth/login?mobile_no=0828035636
+    Route::post('auth/login', [AuthController::class, 'login']); // http://localhost:8000/api/user/auth/login?mobile_no=0828035636
 
 });
