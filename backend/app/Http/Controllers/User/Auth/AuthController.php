@@ -21,10 +21,6 @@ class AuthController extends Controller
                 'mobile_no' => $request->mobile_no,
                 'birth' => DB::raw('CURRENT_TIMESTAMP'),
             ]);
-            return response([
-                'error' => false,
-                'message' => 'create user successfully',
-            ], 200);
         }
 
         $sendOtp = $this->sendSmsNotification($user);         
@@ -77,13 +73,37 @@ class AuthController extends Controller
         // nếu không có mã otp hoặc mã otp đó đã hết hiệu lực thì tạo mã otp mới
         return VerificationCode::create([
             'user_id' => $user->id,
-            'otp' => rand(100000, 999999),
+            'otp' => rand(100000, 999999),  
             'expire_at' => Carbon::now()->addMinutes(3) // thời gian hết hạn = thời gian hiện tại + 3 phút
         ]);
     }
     //kiểm tra mã otp
     public function checkOtp(Request $request)
     {
-        
+        $user = User::where('mobile_no', $request->mobile_no)->first();
+        $verificationCode = VerificationCode::where('user_id', $user->id)->latest()->first();
+        $now = Carbon::now();
+        //nếu mã otp nhập vào trùng với mã otp trong database và mã otp đó vẫn còn hiệu lực thì trả về user
+        if (strcmp($verificationCode->otp, $request->otp) == 0 && $now->isBefore($verificationCode->expire_at)) {
+            return response([
+                'error' => false,
+                'message' => 'OTP is correct',
+                //'now' => $now,
+                //'expire_at' => $verificationCode->expire_at,
+                //'otp' => $verificationCode->otp,
+                //'request' => $request->otp,
+                'userInfo' => $user,
+                //'verificationCode' => $verificationCode,
+            ], 200);
+        } else return response([
+            'error' => true,
+            'message' => 'OTP is incorrect',
+            //'now' => $now,
+            //'expire_at' => $verificationCode->expire_at,
+            //'otp' => $verificationCode->otp,
+            //'request' => $request->otp,
+            //'userInfo' => $user,
+            //'verificationCode' => $verificationCode,
+        ], 500);
     }
 }

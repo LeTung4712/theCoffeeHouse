@@ -45,7 +45,7 @@ Route::group(['prefix' => 'admin'], function () {
 //api cho user
 Route::group(['prefix' => 'user'], function () {
     //auth api
-    Route::get('auth/index', [AuthController::class, 'index']); // http://localhost:8000/api/user/auth/index
     Route::post('auth/login', [AuthController::class, 'login']); // http://localhost:8000/api/user/auth/login?mobile_no=0828035636
+    Route::post('auth/checkOtp', [AuthController::class, 'checkOtp']); // http://localhost:8000/api/user/auth/checkOtp?mobile_no=0828035636&otp=123456
 
 });
